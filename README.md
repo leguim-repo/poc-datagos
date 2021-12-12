@@ -1,6 +1,6 @@
-# The NO NAME PROJECT
+# DataGos
 
-Just a proof of concept around ANYTHING
+Just a proof of concept around logging and metrics
 
 ---
 <!-- Pit i Collons -->
