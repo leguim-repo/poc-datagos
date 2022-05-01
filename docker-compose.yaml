@@ -1,0 +1,17 @@
+version: "3.3"
+services:
+  datagos:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: datagos/latest
+    container_name: datagos
+    restart: unless-stopped
+    environment:
+      TZ: 'Europe/Andorra'
+    ports:
+      - "9999:9999/udp"
+
+networks:
+  datagos-network:
+    driver: bridge
