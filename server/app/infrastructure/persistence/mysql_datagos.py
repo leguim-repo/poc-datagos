@@ -1,7 +1,7 @@
-import datetime
 import json
 
 from server.app.domain.repositories.DatagosInteface import DatagosRepository
+from server.app.domain.trace.datagos_trace import DatagosTrace
 from server.app.infrastructure.persistence.mysql_client import MySqlClient
 
 
@@ -15,13 +15,11 @@ class MySqlDatagosRepository(DatagosRepository):
         return self._db_client.fetchall(query=sql_query)
         pass
 
-    def save(self, trace: dict, trace_type:str, service_name:str):
+    def save(self, trace: DatagosTrace):
         sql_query = """
                 INSERT INTO traces (trace, trace_type, service_name)
                      VALUES (%s, %s, %s)
         """
 
-        args = (trace, trace_type, service_name, datetime.datetime.now())
-        args = (trace, trace_type, service_name)
+        args = (json.dumps(trace.trace), trace.type, trace.service_name)
         self._db_client.insert(query=sql_query, args=args)
-        pass

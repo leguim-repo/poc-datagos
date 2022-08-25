@@ -1,10 +1,12 @@
 from abc import ABC, abstractmethod
 
+from server.app.domain.trace.datagos_trace import DatagosTrace
+
 
 class DatagosRepository(ABC):
 
     @abstractmethod
-    def save(self, trace: dict, trace_type: str, service_name: str):
+    def save(self, trace: DatagosTrace):
         pass
 
     @abstractmethod
