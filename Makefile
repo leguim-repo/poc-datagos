@@ -1,5 +1,8 @@
 .PHONY: lint format test build run clean init start install-hooks
 
+NOW = $(shell date +"%Y%m%d%H%M%S")
+
+
 help: ## prints all targets available and their description
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
@@ -33,4 +36,12 @@ start: ## how to start develop
 install-hooks: ## installs git hooks in your local machine
 	cp .pre-commit .git/hooks/pre-commit
 
+.PHONY: new-migration
+new-migration: ## creates a new migration file under "./migrations/scripts" with a timestamp, remember to rename the file to give it some context
+	@FILE="./server/migrations/$(NOW)_rename_me.sql"; \
+		touch $$FILE; \
+		echo "Created file $$FILE, rename the 'rename_me' part to give the migration some context."
 
+.PHONY: apply-migrations
+apply-migrations: ## applies migrations to local database
+	yoyo apply --batch --database mysql://root:datagos@localhost:8306/datagos ./server/migrations/

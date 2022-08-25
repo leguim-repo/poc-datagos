@@ -1,2 +1,6 @@
+pymysql
+yoyo-migrations
+cryptography
+
 colorama
 pyfiglet
