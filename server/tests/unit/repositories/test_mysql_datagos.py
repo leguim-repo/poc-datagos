@@ -1,9 +1,8 @@
-import datetime
 import unittest
 
-from server.app.domain.trace.datagos_trace import DatagosTrace
-from server.app.infrastructure.persistence.mysql_client import get_mysql_client
-from server.app.infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
+from server.domain.trace.datagos_trace import DatagosTrace
+from server.infrastructure.persistence import get_mysql_client
+from server.infrastructure.persistence import MySqlDatagosRepository
 
 
 class TestMySqlDatagosShould(unittest.TestCase):

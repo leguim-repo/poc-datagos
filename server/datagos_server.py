@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-import ast
 import json
 import logging
 import os
@@ -8,9 +7,9 @@ import pyfiglet
 from colorama import init, Fore
 from enum import Enum
 
-from server.app.domain.trace.datagos_trace import DatagosTrace
-from server.app.infrastructure.persistence.mysql_client import get_mysql_client
-from server.app.infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
+from server.domain.trace.datagos_trace import DatagosTrace
+from server.infrastructure.persistence.mysql_client import get_mysql_client
+from server.infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
 
 LOG_FILE = "datagos.log"
 HOST, PORT = "0.0.0.0", 9999
