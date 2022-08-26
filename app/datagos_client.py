@@ -13,6 +13,7 @@ if __name__ == '__main__':
         LOGGER.warning("warning")
         LOGGER.error("error")
         LOGGER.debug("debug")
+        LOGGER.info("esto pinta que chuta bien")
 
     except Exception as error_message:
         trace = traceback.format_exc()

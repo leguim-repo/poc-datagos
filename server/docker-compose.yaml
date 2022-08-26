@@ -1,7 +1,7 @@
 services:
-  datagos_mysql:
+  datagos_mysql-dev:
     image: mysql:8.0
-    container_name: datagos-mysql
+    container_name: datagos-mysql-dev
     restart: unless-stopped
     ports:
       - 8306:3306
@@ -14,7 +14,7 @@ services:
       TZ: 'UTC'
     command: --sql_mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"
     networks:
-      datagos_network:
+      datagos-network:
     volumes:
       - datagos_data:/var/lib/mysql
 
@@ -22,4 +22,4 @@ volumes:
   datagos_data:
 
 networks:
-  datagos_network:
+  datagos-network:

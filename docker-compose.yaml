@@ -1,5 +1,25 @@
 version: "3.3"
 services:
+  datagos_mysql:
+    image: mysql:8.0
+    container_name: datagos-mysql
+    restart: unless-stopped
+    ports:
+      - "8306:3306"
+    environment:
+      MYSQL_USER: datagos
+      MYSQL_PASSWORD: datogs
+      MYSQL_ROOT_PASSWORD: datagos
+      MYSQL_DATABASE: datagos
+      MYSQL_TCP_PORT: 3306
+      TZ: 'UTC'
+    command: --sql_mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"
+    networks:
+      datagos-network:
+      #ipv4_address: 172.20.0.10
+    volumes:
+      - datagos_data:/var/lib/mysql
+
   datagos:
     build:
       context: .
@@ -9,9 +29,22 @@ services:
     restart: unless-stopped
     environment:
       TZ: 'Europe/Andorra'
+      DB_HOST: datagos_mysql
+      DB_PORT: 3306
     ports:
       - "9999:9999/udp"
+    depends_on:
+      - datagos_mysql
+    links:
+      - datagos_mysql
+    networks:
+      datagos-network:
+      #ipv4_address: 172.20.0.10
+
+volumes:
+  datagos_data:
+
 
 networks:
   datagos-network:
-    driver: bridge
+    #driver: bridge

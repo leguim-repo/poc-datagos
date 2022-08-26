@@ -1,3 +1,4 @@
+import os
 from typing import Optional, Iterable, Any, List, Dict
 
 import pymysql
@@ -55,8 +56,8 @@ class MySqlClient:
 
 
 def get_mysql_client() -> MySqlClient:
-    return MySqlClient(host="127.0.0.1",
-                       port="8306",
+    return MySqlClient(host=os.environ['DB_HOST'],
+                       port=os.environ['DB_PORT'],
                        user="root",
                        passwd="datagos",
                        database="datagos"
