@@ -9,10 +9,10 @@ if __name__ == '__main__':
                            force_stdout=False).get_logger()
     try:
         #attach_datagos()
-        LOGGER.info("aaa----------------------------------------------------------")
-        #LOGGER.warning("aaa")
-        #LOGGER.error("aaa")
-        #LOGGER.debug("aaa")
+        LOGGER.info("info")
+        LOGGER.warning("warning")
+        LOGGER.error("error")
+        LOGGER.debug("debug")
 
     except Exception as error_message:
         trace = traceback.format_exc()

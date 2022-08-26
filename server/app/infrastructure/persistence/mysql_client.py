@@ -39,6 +39,7 @@ class MySqlClient:
         return res
 
     def insert(self, query: str, args: Optional[Iterable[Any]] = None):
+        self._connection.ping()  # reconnecting mysql
         try:
             with self.cursor() as cursor:
                 cursor.execute(query, args)

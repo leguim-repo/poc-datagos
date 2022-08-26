@@ -1,10 +1,16 @@
 #!/usr/bin/env python
+import ast
+import json
 import logging
 import os
 import socketserver
 import pyfiglet
 from colorama import init, Fore
 from enum import Enum
+
+from server.app.domain.trace.datagos_trace import DatagosTrace
+from server.app.infrastructure.persistence.mysql_client import get_mysql_client
+from server.app.infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
 
 LOG_FILE = "datagos.log"
 HOST, PORT = "0.0.0.0", 9999
@@ -67,6 +73,7 @@ printer = LogPrinter()
 
 
 class SyslogUDPHandler(socketserver.BaseRequestHandler):
+    _datagos_repo = MySqlDatagosRepository(db_client=get_mysql_client())
 
     def handle(self):
         data = bytes.decode(self.request[0].strip())
@@ -75,6 +82,12 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
         data_log = f"{remote_address} {data}"
         logging.info(data_log)
         printer.print(data=data)
+        data = json.loads(data[4:])
+        datagos_trace = DatagosTrace(trace=data,
+                                     type=data.get("level") or "no_type",
+                                     service_name=data.get("name") or "no_service",
+                                     created_at=None)
+        self._datagos_repo.save(trace=datagos_trace)
 
 
 if __name__ == "__main__":
