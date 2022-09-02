@@ -3,7 +3,7 @@ services:
   datagos_mariadb:
     image: yobasystems/alpine-mariadb
     container_name: datagos-mariadb
-    restart: unless-stopped
+    restart: on-failure
     ports:
       - "8306:3306"
     environment:
@@ -46,7 +46,7 @@ services:
       dockerfile: Dockerfile
     image: datagos/latest
     container_name: datagos
-    restart: unless-stopped
+    restart: on-failure
     environment:
       TZ: 'Europe/Andorra'
       DB_HOST: datagos_mariadb
