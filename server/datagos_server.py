@@ -88,6 +88,19 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
                                      created_at=None)
         self._datagos_repo.save(trace=datagos_trace)
 
+    def get_data_safe(self, data_received: str) -> dict:
+        try:
+            data = json.loads(data_received[4:])
+        except Exception as e:
+            data = {
+                "service_name": "get_data_safe",
+                "type": logging.ERROR,
+                "message": "cannot get data safely",
+                "message_exception": str(e),
+                "data_raw": data_received,
+            }
+        return data
+
 
 if __name__ == "__main__":
     init(autoreset=True)
