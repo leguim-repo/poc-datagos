@@ -81,7 +81,7 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
         data_log = f"{remote_address} {data}"
         logging.info(data_log)
         printer.print(data=data)
-        data = json.loads(data[4:])
+        data = self.get_data_safe(data_received=data)
         datagos_trace = DatagosTrace(trace=data,
                                      type=data.get("level") or "no_type",
                                      service_name=data.get("name") or "no_service",
