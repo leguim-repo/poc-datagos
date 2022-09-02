@@ -1,8 +1,8 @@
 version: "3.3"
 services:
-  datagos_mysql:
-    image: mysql:8.0
-    container_name: datagos-mysql
+  datagos_mariadb:
+    image: mariadb
+    container_name: datagos-mariadb
     restart: unless-stopped
     ports:
       - "8306:3306"
@@ -18,7 +18,27 @@ services:
       datagos-network:
       #ipv4_address: 172.20.0.10
     volumes:
-      - datagos_data:/var/lib/mysql
+      - datagos_mariadb_data:/var/lib/mysql
+
+#  datagos_mysql:
+#    image: mysql:8.0
+#    container_name: datagos-mysql
+#    restart: unless-stopped
+#    ports:
+#      - "8306:3306"
+#    environment:
+#      MYSQL_USER: datagos
+#      MYSQL_PASSWORD: datogs
+#      MYSQL_ROOT_PASSWORD: datagos
+#      MYSQL_DATABASE: datagos
+#      MYSQL_TCP_PORT: 3306
+#      TZ: 'UTC'
+#    command: --sql_mode="STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION"
+#    networks:
+#      datagos-network:
+#      #ipv4_address: 172.20.0.10
+#    volumes:
+#      - datagos_data:/var/lib/mysql
 
   datagos:
     build:
@@ -29,21 +49,21 @@ services:
     restart: unless-stopped
     environment:
       TZ: 'Europe/Andorra'
-      DB_HOST: datagos_mysql
+      DB_HOST: datagos_mariadb
       DB_PORT: 3306
     ports:
       - "9999:9999/udp"
     depends_on:
-      - datagos_mysql
+      - datagos_mariadb
     links:
-      - datagos_mysql
+      - datagos_mariadb
     networks:
       datagos-network:
       #ipv4_address: 172.20.0.10
 
 volumes:
-  datagos_data:
-
+#  datagos_data:
+  datagos_mariadb_data:
 
 networks:
   datagos-network:
