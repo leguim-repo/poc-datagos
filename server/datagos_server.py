@@ -3,6 +3,8 @@ import json
 import logging
 import os
 import socketserver
+from typing import Any
+
 import pyfiglet
 from colorama import init, Fore
 from enum import Enum
@@ -52,7 +54,7 @@ class LogPrinter:
                 return color.value
         return color.value
 
-    def print(self, data: str):
+    def print_to_custom_terminal(self, data: str):
         max_chars = 160
         occupancy_lines = (len(data) // max_chars) + round(len(data) / max_chars)
 
@@ -67,6 +69,10 @@ class LogPrinter:
         color = self.detect_color(log_string=data)
         print(color + data + str(self._remaining_lines))
 
+    def print_to_std_terminal(self, data: str):
+        color = self.detect_color(log_string=data)
+        print(color + data)
+
 
 printer = LogPrinter()
 
@@ -75,29 +81,29 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
     _datagos_repo = MySqlDatagosRepository(db_client=get_mysql_client())
 
     def handle(self):
-        data = bytes.decode(self.request[0].strip())
+        data = self.get_data_safe(raw=self.request)
         data = data.rstrip("\x00")
         remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
         data_log = f"{remote_address} {data}"
         logging.info(data_log)
-        printer.print(data=data)
-        data = self.get_data_safe(data_received=data)
+        printer.print_to_std_terminal(data=data)
+        data = json.loads(data[4:])
         datagos_trace = DatagosTrace(trace=data,
                                      type=data.get("level") or "no_type",
                                      service_name=data.get("name") or "no_service",
                                      created_at=None)
         self._datagos_repo.save(trace=datagos_trace)
 
-    def get_data_safe(self, data_received: str) -> dict:
+    def get_data_safe(self, raw: Any) -> Any:
         try:
-            data = json.loads(data_received[4:])
+            data = bytes.decode(raw[0].strip())
         except Exception as e:
             data = {
                 "service_name": "get_data_safe",
                 "type": logging.ERROR,
                 "message": "cannot get data safely",
                 "message_exception": str(e),
-                "data_raw": data_received,
+                "data_raw": raw,
             }
         return data
 
