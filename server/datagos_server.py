@@ -88,7 +88,11 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
 
         sanitize = data.replace('"{"', '{"').replace('}"}', '}}')
         printer.print_to_std_terminal(data=sanitize)
-        data = json.loads(sanitize[4:])
+        try:
+            data = json.loads(sanitize[4:])
+        except Exception as e:
+            print(f"petardazo {sanitize}")
+
         datagos_trace = DatagosTrace(trace=data,
                                      type=data.get("level") or "no_type",
                                      service_name=data.get("name") or "no_service",
