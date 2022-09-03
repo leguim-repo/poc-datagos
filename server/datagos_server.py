@@ -9,9 +9,9 @@ import pyfiglet
 from colorama import init, Fore
 from enum import Enum
 
-from server.domain.trace.datagos_trace import DatagosTrace
-from server.infrastructure.persistence.mysql_client import get_mysql_client
-from server.infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
+from domain.trace.datagos_trace import DatagosTrace
+from infrastructure.persistence.mysql_client import get_mysql_client
+from infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
 
 LOG_FILE = "datagos.log"
 HOST, PORT = "0.0.0.0", 9999
@@ -81,17 +81,30 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
     _datagos_repo = MySqlDatagosRepository(db_client=get_mysql_client())
 
     def handle(self):
-        data = self.get_data_safe(raw=self.request)
-        remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
-        data_log = f"{remote_address} {data}"
-        logging.info(data_log)
-
-        sanitize = data.replace('"{"', '{"').replace('}"}', '}}')
-        printer.print_to_std_terminal(data=sanitize)
+        data = None
         try:
+            data = bytes.decode(self.request[0].strip())
+            data = data.rstrip("\x00")
+
+            remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
+            data_log = f"{remote_address} {data}"
+            logging.info(data_log)
+
+            sanitize = data.replace('"{"', '{"').replace('}"}', '}}')
+            printer.print_to_std_terminal(data=sanitize)
             data = json.loads(sanitize[4:])
         except Exception as e:
-            print(f"petardazo {sanitize}")
+            trace = {"error": str(e), "request0": str(self.request[0]), "request": self.request}
+            datagos_trace = DatagosTrace(trace=trace,
+                                         type="ERROR",
+                                         service_name="Datagos.SyslogUDPHandler",
+                                         created_at=None)
+            self._datagos_repo.save(trace=datagos_trace)
+
+        if data is None:
+            print(f"self.request: {self.request}")
+            print(f"self.request0: {self.request[0]}")
+            return
 
         datagos_trace = DatagosTrace(trace=data,
                                      type=data.get("level") or "no_type",
