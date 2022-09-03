@@ -86,9 +86,8 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
         data_log = f"{remote_address} {data}"
         logging.info(data_log)
 
-        printer.print_to_std_terminal(data=data)
         sanitize = data.replace('"{"', '{"').replace('}"}', '}}')
-        print(f"sanitize: {sanitize}")
+        printer.print_to_std_terminal(data=sanitize)
         data = json.loads(sanitize[4:])
         datagos_trace = DatagosTrace(trace=data,
                                      type=data.get("level") or "no_type",
