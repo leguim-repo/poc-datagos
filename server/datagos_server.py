@@ -85,6 +85,7 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
         remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
         data_log = f"{remote_address} {data}"
         logging.info(data_log)
+
         printer.print_to_std_terminal(data=data)
         data = json.loads(data[4:])
         datagos_trace = DatagosTrace(trace=data,
