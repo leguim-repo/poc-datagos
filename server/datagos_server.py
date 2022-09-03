@@ -82,7 +82,6 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
 
     def handle(self):
         data = self.get_data_safe(raw=self.request)
-        data = data.rstrip("\x00")
         remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
         data_log = f"{remote_address} {data}"
         logging.info(data_log)
@@ -97,6 +96,7 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
     def get_data_safe(self, raw: Any) -> Any:
         try:
             data = bytes.decode(raw[0].strip())
+            data = data.rstrip("\x00")
         except Exception as e:
             data = {
                 "service_name": "get_data_safe",
