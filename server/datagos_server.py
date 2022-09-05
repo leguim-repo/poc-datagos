@@ -83,6 +83,10 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         data = None
         try:
+            if self.request[0].strip()[0] == 0xd0:
+                print(f"Detected 0xd0 -> {self.request[0].strip()}")
+                return
+
             data = bytes.decode(self.request[0].strip())
             data = data.rstrip("\x00")
 
