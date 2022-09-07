@@ -83,14 +83,14 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         data = None
         try:
+            remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
             if self.request[0].strip()[0] == 0xd0:
-                print(f"Detected 0xd0 -> {self.request[0].strip()}")
+                print(f"Detected 0xd0 from {remote_address} -> {self.request[0].strip()}")
                 return
 
             data = bytes.decode(self.request[0].strip())
             data = data.rstrip("\x00")
 
-            remote_address = f"{self.client_address[0]}:{self.client_address[1]}"
             data_log = f"{remote_address} {data}"
             logging.info(data_log)
 
@@ -103,7 +103,9 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
                                          type="ERROR",
                                          service_name="Datagos.SyslogUDPHandler",
                                          created_at=None)
-            self._datagos_repo.save(trace=datagos_trace)
+            print(f"Exception trace: {trace}\ndatagos_trace: {datagos_trace}")
+            # self._datagos_repo.save(trace=datagos_trace)
+            data = None
 
         if data is None:
             print(f"self.request: {self.request}")
