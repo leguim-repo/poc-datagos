@@ -1,8 +1,8 @@
 import unittest
 
-from server.domain.trace.datagos_trace import DatagosTrace
-from server.infrastructure.persistence import get_mysql_client
-from server.infrastructure.persistence import MySqlDatagosRepository
+from domain.trace.datagos_trace import DatagosTrace
+from infrastructure.persistence.mysql_client import get_mysql_client
+from infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
 
 
 class TestMySqlDatagosShould(unittest.TestCase):
@@ -13,7 +13,7 @@ class TestMySqlDatagosShould(unittest.TestCase):
         trace_mock = DatagosTrace(trace={"message": "blabla", "method":"method_name"},
                                   type="test",
                                   service_name="mein_service",
-                                  created_at=None)
+                                  )
         datagos_repo.save(trace=trace_mock)
         rows = datagos_repo.find_all()
         expected = []

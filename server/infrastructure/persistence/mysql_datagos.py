@@ -1,8 +1,8 @@
 import json
 
-from server.domain.repositories.DatagosInteface import DatagosRepository
-from server.domain.trace.datagos_trace import DatagosTrace
-from server.infrastructure.persistence.mysql_client import MySqlClient
+from domain.repositories.DatagosInteface import DatagosRepository
+from domain.trace.datagos_trace import DatagosTrace
+from infrastructure.persistence.mysql_client import MySqlClient
 
 
 class MySqlDatagosRepository(DatagosRepository):

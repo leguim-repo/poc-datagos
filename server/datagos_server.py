@@ -102,7 +102,7 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
             datagos_trace = DatagosTrace(trace=trace,
                                          type="ERROR",
                                          service_name="Datagos.SyslogUDPHandler",
-                                         created_at=None)
+                                         )
             print(f"Exception trace: {trace}\ndatagos_trace: {datagos_trace}")
             # self._datagos_repo.save(trace=datagos_trace)
             data = None
@@ -115,7 +115,7 @@ class SyslogUDPHandler(socketserver.BaseRequestHandler):
         datagos_trace = DatagosTrace(trace=data,
                                      type=data.get("level") or "no_type",
                                      service_name=data.get("name") or "no_service",
-                                     created_at=None)
+                                     )
         self._datagos_repo.save(trace=datagos_trace)
 
     def get_data_safe(self, raw: Any) -> Any:

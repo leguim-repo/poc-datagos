@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from server.domain.trace.datagos_trace import DatagosTrace
+from domain.trace.datagos_trace import DatagosTrace
 
 
 class DatagosRepository(ABC):

@@ -4,9 +4,12 @@ import traceback
 from datagos_logger import DataGosLogger, attach_datagos
 
 if __name__ == '__main__':
+    local_server = "127.0.01"
+    prod_server = "192.168.0.47"
+    datagos_server_ip = local_server
     LOGGER = DataGosLogger(name="DataGosDemo",
                            level=logging.DEBUG,
-                           datagos_server_ip="192.168.0.47",
+                           datagos_server_ip=datagos_server_ip,
                            force_stdout=False).get_logger()
     try:
         # attach_datagos()
