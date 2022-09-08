@@ -30,7 +30,7 @@ class DataGosLogger(logging.Logger):
                  level=logging.INFO,
                  force_stdout=False,
                  datagos_server_ip="192.168.0.250",
-                 datagos_server_port=9999):
+                 datagos_server_port=39999):
         super().__init__(name, level)
         self.level = level
         self.name = name

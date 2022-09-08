@@ -14,7 +14,7 @@ from infrastructure.persistence.mysql_client import get_mysql_client
 from infrastructure.persistence.mysql_datagos import MySqlDatagosRepository
 
 LOG_FILE = "datagos.log"
-HOST, PORT = "0.0.0.0", 9999
+HOST, PORT = "0.0.0.0", 39999
 
 logging.basicConfig(level=logging.INFO, format="%(message)s", datefmt="", filename=LOG_FILE, filemode="a")
 
