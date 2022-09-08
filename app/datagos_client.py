@@ -6,7 +6,10 @@ from datagos_logger import DataGosLogger, attach_datagos
 if __name__ == '__main__':
     local_server = "127.0.01"
     prod_server = "192.168.0.47"
-    datagos_server_ip = local_server
+    if False:
+        datagos_server_ip = local_server
+    else:
+        datagos_server_ip = prod_server
     LOGGER = DataGosLogger(name="DataGosDemo",
                            level=logging.DEBUG,
                            datagos_server_ip=datagos_server_ip,
