@@ -33,7 +33,7 @@ services:
       DB_HOST: datagos_mariadb
       DB_PORT: 3306
     ports:
-      - "9999:9999/udp"
+      - "39999:39999/udp"
     depends_on:
       - datagos_mariadb
     links:
