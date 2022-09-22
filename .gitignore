@@ -1,6 +1,6 @@
 # From custom.gitignore
 .idea/**
-
+.scannerwork/**
 # End custom.gitignore
 
 # General

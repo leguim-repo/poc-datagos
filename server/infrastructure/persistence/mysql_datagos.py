@@ -13,7 +13,6 @@ class MySqlDatagosRepository(DatagosRepository):
     def find_all(self):
         sql_query = "SELECT * FROM traces"
         return self._db_client.fetchall(query=sql_query)
-        pass
 
     def save(self, trace: DatagosTrace):
         sql_query = """
